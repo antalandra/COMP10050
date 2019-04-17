@@ -6,6 +6,7 @@
 
 
 #include "game_init.h"
+#include "game_logic.h"
 #include <stdio.h>
 
 
@@ -27,7 +28,7 @@ void initialize_board(Square board[NUM_ROWS][NUM_COLUMNS]){
                 //creates a normal square otherwise
                 board[i][j].type = NORMAL;
             }
-            board[i][j].stack = NULL;
+            board[i][j].top_stack = NULL;
         }
     }
 }
@@ -58,8 +59,9 @@ int initialize_players(Player players[]){
 
     else
     {
+        int color_choice;
         //going through the number of players to fill in their names and color choices
-        for (int pl = 0; pl < numPlayer; ++i)
+        for (int pl = 0; pl < numPlayer; ++pl)
         {
             printf("\nPlease enter name of player %d: ", pl+1);
             scanf("%s", &players[pl].player_name); //scanning name of player
@@ -74,33 +76,35 @@ int initialize_players(Player players[]){
                    "Input 6 for Orange.\n");
 
             //scanning choice into a variable
-           int color_choice;
            scanf("%d", &color_choice);
            color_choice--;  //decrementing choice as ENUMS are ordered from zero
            players[pl].col = color_choice;    //placing color choice in corresponding member of struct of that player
 
-            //ASK IF THIS IS CORRECT FOR IMPLEMENTATION
+        }
 
-            //checking if color is already taken
-
-           /*if (players[pl-1].col == players[pl].col)
-           {
-               //error message to screen if color is already taken
-               printf("Each player must have a different color!\n"
-                      "Please pick a different color.\n
+        if (checkIfChosen(players, numPlayer) == 1)
+        {
+             printf("Each player must have a different color!\n");
+            for(int pl = 0; pl < numPlayer; ++pl)
+            {
+                printf("Player %d, please enter a color.\n"
                        "Input 1 for Red.\n"
                        "Input 2 for Blue.\n"
                        "Input 3 for Green\n"
                        "Input 4 for Yellow.\n"
                        "Input 5 for Pink.\n"
-                       "Input 6 for Orange.\n");
-                //scanning new color choice
+                       "Input 6 for Orange.\n", pl+1);
+
                 scanf("%d", &color_choice);
+                color_choice--;
                 players[pl].col = color_choice;
-           }
+            }
         }
-*/
+
+    }
+
         return numPlayer;
+
 
 }
 

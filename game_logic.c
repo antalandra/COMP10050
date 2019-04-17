@@ -6,7 +6,9 @@
 
 
 #include "game_init.h"
+#include "game_logic.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void printLine();
 
@@ -19,7 +21,7 @@ void printLine();
 char print_token(Token *t){
     if((*t).col== PINK) return 'P';
     if((*t).col== RED) return 'R';
-    if((*t).col== BLU) return 'B';
+    if((*t).col== BLUE) return 'B';
     if((*t).col== GREEN) return 'G';
     if((*t).col== ORANGE) return 'O';
     if((*t).col== YELLOW) return 'Y';
@@ -43,8 +45,8 @@ void print_board(Square board[NUM_ROWS][NUM_COLUMNS]){
         //if the square (i,j) is occupied,
         //c is assigned the initial of the color of the token that occupies the square
         for (int j = 0; j < NUM_COLUMNS; j++){
-            if(board[i][j].stack != NULL){
-                c = print_token(board[i][j].stack);
+            if(board[i][j].top_stack != NULL){
+                c = print_token(board[i][j].top_stack);
             }
             //if the square (i,j) is empty
             else{
@@ -67,6 +69,26 @@ void printLine(){
   printf("   -------------------------------------\n");
 }
 
+
+//checking if the color chosen by player has been already taken by another player
+int checkIfChosen(Player players[], int numPlayer)
+{
+    for(int cur_pl=0; cur_pl<numPlayer; ++cur_pl)
+    {
+        for(int nex_pl=cur_pl+1; nex_pl<numPlayer; ++nex_pl)
+            {
+                if (players[nex_pl].col == players[cur_pl].col)
+                {
+                   return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+    }
+}
+
 /*
  * Place tokens in the first column of the board
  *
@@ -74,6 +96,7 @@ void printLine(){
  *        players - the array of the players
  *        numPlayers - the number of players
  */
+
 void place_tokens(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers){
 
     int tok = 0;    //initialising token number to zero
@@ -83,15 +106,16 @@ void place_tokens(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int num
         while ( pl != numPlayers)
         {
             int row_num;
-            printf("Player %d: place token %d on a row of your choice from 1 to 6: ", pl+1, tok+1);
+            printf("Player %d: place token %d on a row of your choice from 0 to 5: ", pl+1, tok+1);
             scanf("%d", &row_num);  //scan row number from user
-            row_num -=1;  //decreasing row value by 1 as two dimensional matrix starts at 0
 
             Token *new_tok = malloc(sizeof(Token));
-            new_tok.color = players[pl].col; //adding the colour of the player to the token
-            new_tok.belowPtr = board[row_num][0].top_stack;
-            board[row_num][0].top_stack = newPtr;
+            new_tok->col = players[pl].col; //adding the colour of the player to the token
+            new_tok->belowPtr = board[row_num][0].top_stack;
+            board[row_num][0].top_stack = new_tok;  //new tok or newPtr???
 
+            print_token(board[row_num][0].top_stack);
+            print_board(board);
             pl++;   //incrementing player number
         }
 
@@ -138,7 +162,7 @@ void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPla
         // take his turn:
         // roll die and tell the player his die roll
         int die = rand() % 6;
-        puts("You rolled: %d": die);
+        printf("You rolled: %d\n", die);
 
         // ask the player if he wants to move sideways
         int answer;
@@ -161,12 +185,14 @@ void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPla
         // check if obstacles are still pbstacles
 
         // once the last player took his turn
-        if (i == numPlayer - 1) {
+        if (i == numPlayers - 1) {
             i = -1; // reset to the first player
         }
     }
 
 }
+
+//did this save
 
 
 

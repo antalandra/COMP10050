@@ -6,6 +6,12 @@
  */
 void print_board(Square board[NUM_ROWS][NUM_COLUMNS]);
 
+/*
+ * returns value 1 if two or more players have the same color
+ *
+ * Input: the color of each player and the number of players
+ */
+int checkIfChosen(Player players[], int numPlayer);
 
 /*
  * Place tokens in the first column of the board
