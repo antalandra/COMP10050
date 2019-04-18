@@ -34,3 +34,12 @@ void place_tokens(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int num
 void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers);
 
 
+/*
+ *Moves the token from one location to another
+ *Input: the board
+ *       current row and column location of token
+ *       future row and column location of token
+ */
+
+void move_token(Square board[][NUM_COLUMNS], int cur_row, int cur_col, int new_row, int new_col);
+
