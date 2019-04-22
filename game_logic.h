@@ -31,7 +31,7 @@ void place_tokens(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int num
  *        players - the array of the players
  *        numPlayers - the number of players
  */
-void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers);
+int play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers);
 
 
 /*
@@ -42,4 +42,14 @@ void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPla
  */
 
 void move_token(Square board[][NUM_COLUMNS], int cur_row, int cur_col, int new_row, int new_col);
+
+/*
+ *Checks which player won
+ *
+ *Input: the board
+ *      the players
+ *      number of players
+ */
+
+int checkWhoWon(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers);
 

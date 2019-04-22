@@ -130,13 +130,13 @@ void place_tokens(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int num
 // returns the name of the color from an enum Color type
 char *color_name(enum color color) {
     switch(color) {
-        case 0: return "red";
-        case 1: return "blue";
-        case 2: return "green";
-        case 3: return "yellow";
-        case 4: return "pink";
-        case 5: return "orange";
-        default: return "color blind";
+        case 0: return "Red";
+        case 1: return "Blue";
+        case 2: return "Green";
+        case 3: return "Yellow";
+        case 4: return "Pink";
+        case 5: return "Orange";
+        default: return "NoColor";
     }
 }
 
@@ -150,23 +150,72 @@ void move_token(Square board[][NUM_COLUMNS], int cur_row, int cur_col, int new_r
     board[new_row][new_col].top_stack = token; // placing token on top of the new location
 }
 
-//function that checks if squares before obstacle are filled. If they are not, turning the obstacle square into a normal square
-int obstacle_to_normal(Square board[NUM_ROWS][NUM_COLUMNS], int num_row, int num_col)
+//function that checks if squares before obstacle are filled.
+int check_if_obstacle(Square board[NUM_ROWS][NUM_COLUMNS], int num_row, int num_col)
 {
-    for (int i = 0; i < NUM_ROWS; ++i)
+    int i = 0;
+    int j = 0;
+    while(i < NUM_ROWS)
     {
-        for (int j = 0; j < num_col; ++j)
+        while(j < num_col)
         {
-            if (board[i][j].top_stack != ' ')
-            {
-                return 0;
-            }
-
+                if (board[i][j].top_stack != NULL )
+                {
+                    return 0;
+                }
+            j++;
 
         }
+        j=0;
+        i++;
     }
+
+    return 1;
 }
 
+
+
+
+int checkWhoWon(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers)
+{
+    //creating dynamic array to hold the counters for each token color of each player in the last column at the end of the game
+    int *NumOfColors = (int*)calloc(numPlayers, sizeof(int));
+
+    for ( int num = 0; num < numPlayers; ++num)
+    {
+        //going through the rows of last column to see if the colors in the square match to the player's color
+        for (int i = 0; i < NUM_ROWS; ++i)
+        {
+
+            Token *token = board[i][8].top_stack;
+            while (token != NULL)
+            {
+                if(token->col == players[num].col)
+                {
+                    NumOfColors[num] += 1; //incrementing every time color of token matches that of player's
+                }
+
+                token = token->belowPtr;    //going to next element in the stack (if there is any)
+
+                }
+
+            }
+
+        }
+
+
+        //running through array to check if there is 3 or more tokens of the same color
+		for ( int i = 0; i < numPlayers; ++i)
+		{
+			if ( NumOfColors[i] >= 3)
+			{
+				return i;  //if there is, returning the player's name who has 3 or more tokens in the last column
+                                                //->returning winner
+			}
+		}
+
+    return 7; //returning a number that is bigger than the potential maximum number of players
+}
 
 /*
  * Place tokens in the first column of the board
@@ -175,7 +224,7 @@ int obstacle_to_normal(Square board[NUM_ROWS][NUM_COLUMNS], int num_row, int num
  *        players - the array of the players
  *        numPlayers - the number of players
  */
-void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers)
+int play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers)
 {
     //creating variables for row, column values, and choice value for the sideways move
     int row_loc, column_loc, side_move;
@@ -189,7 +238,6 @@ void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPla
         scanf("%d", &die);
 
         printf("\nPlayer's turn: %s (%s)", players[i].player_name, color_name(players[i].col));
-        // take his turn:
         // roll die and tell the player his die roll
         //int die = rand() % 6;
         printf("You rolled: %d\n", die);
@@ -207,37 +255,113 @@ void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPla
 
                 scanf("%d %d", &row_loc, &column_loc);
 
-                // check if the color is that of the user if (strncmp(board[row_loc][column_loc].top_stack, color_name(players[i].col),1)==0)
-               // {
-                   printf("Please enter 1 if you wish to go upwards or 2 for downwards: ");
-                   scanf("%d", &side_move);
-
-                    if(side_move == 1)
+                if (board[row_loc][column_loc].top_stack != NULL)
+                {
+                    //while token doesn't belong to the player
+                    while (players[i].col != board[row_loc][column_loc].top_stack->col)
                     {
-                        move_token(board, row_loc, column_loc, row_loc-1, column_loc);
-                        print_token(board[row_loc-1][column_loc].top_stack);
-                        print_board(board);
+                        printf("You can only move your own token!\n");
+                        printf("Player %s: Which token do you wish to move sideways (it must be your token)\n"
+                           "\nPlease give your answer in co-ordinates (row number followed by column number)\n", players[i].player_name);
+
+                        scanf("%d %d", &row_loc, &column_loc);
                     }
 
-                    else if(side_move == 2)
-                    {
-                        move_token(board, row_loc, column_loc, row_loc+1, column_loc);
-                        print_token(board[row_loc+1][column_loc].top_stack);
+                       printf("Please enter 1 if you wish to go upwards or 2 for downwards: ");
+                       scanf("%d", &side_move);
+
+                        if(side_move == 1)
+                        {
+                            move_token(board, row_loc, column_loc, row_loc-1, column_loc);
+                            print_token(board[row_loc-1][column_loc].top_stack);
+                            print_board(board);
+                        }
+
+                        else if (side_move == 2)
+                        {
+                            move_token(board, row_loc, column_loc, row_loc+1, column_loc);
+                            print_token(board[row_loc+1][column_loc].top_stack);
+                            print_board(board);
+                        }
+
+                        printf("Player %s: Move token from row %d forward.\n"
+                                "It doesn't have to be your token, but it must be on top!\n"
+                                "Please specify column number.\n", players[i].player_name, die);
+                        scanf("%d", &column_loc);
+
+                        if(board[die][column_loc].type == OBSTACLE)
+              {
+                  if(check_if_obstacle(board, die, column_loc) == 0)
+                  {
+
+
                         print_board(board);
+                        printf("\nThis is an obstacle square! You cannot move the token from here until every other token before the obstacle has reached column %d!\n"
+                               "\nDo you have any other tokens you could move on row %d", column_loc, die);
+
+                        printf("Please enter 1 if you do, 0 if you don't: ");
+                        int tokenOnRow;
+                        scanf("%d", &tokenOnRow);
+
+                        while(tokenOnRow != 0)
+                        {
+                            printf("%s, please specify column number.\n", players[i].player_name);
+                            scanf("%d", &column_loc);
+
+                            if(board[die][column_loc].type == OBSTACLE)
+                            {
+
+                                printf("This is an obstacle square! You cannot move the token from here until every other token before the obstacle has reached row %d!\n"
+                                "Do you have any other tokens you could move on row %d", die, die);
+                                print_board(board);
+
+                                printf("Please enter 1 if you do, 0 if you don't: ");
+                                scanf("%d", &tokenOnRow);
+
+                            }
+
+                            else if(board[die][column_loc].type == NORMAL)
+                            {
+                                tokenOnRow = 0;
+                            }
+
+                        move_token(board, die, column_loc, die, column_loc+1);
+                        print_token(board[die][column_loc+1].top_stack);
+                        print_board(board);
+
+                        }
+                  }
+
+                else if (check_if_obstacle(board, die, column_loc) == 1)
+                    {
+                        board[die][column_loc].type = NORMAL;
+                        move_token(board, die, column_loc, die, column_loc+1);
+                        print_token(board[die][column_loc+1].top_stack);
+                        print_board(board);
+
                     }
+              }
 
-                    printf("Player %s: Move token from row %d forward.\n"
-                            "It doesn't have to be your token, but it must be on top!\n"
-                            "Please specify column number.\n", players[i].player_name, die);
-                    scanf("%d", &column_loc);
-
-
+            else if (board[die][column_loc].type == NORMAL)
+                {
                     move_token(board, die, column_loc, die, column_loc+1);
                     print_token(board[die][column_loc+1].top_stack);
                     print_board(board);
-            }
+                }
 
 
+
+
+                         if (checkWhoWon(board, players, numPlayers) != 7)
+                        {
+                printf("\nCongratulations, %s! You are the winner of the game with 3 %s tokens in the last column!!\n",
+                       players[checkWhoWon(board, players, numPlayers)].player_name, players[checkWhoWon(board, players, numPlayers)].col);
+                       return 1;
+                        }
+
+                    }
+
+                }
 
         else if (answer == 0)
             //moving tokens forward according to number on die
@@ -247,102 +371,82 @@ void play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPla
                    "Please specify column number.\n", players[i].player_name, die);
             scanf("%d", &column_loc);
 
-              if(board[die][column_loc].type == OBSTACLE)
-                    {
-                        //printf("%d", obstacle_to_normal(board, die, column_loc));
-                       if (obstacle_to_normal(board, die, column_loc) == 0)
+
+            if(board[die][column_loc].type == OBSTACLE)
+              {
+                  if(check_if_obstacle(board, die, column_loc) == 0)
+                  {
+
+
+                        print_board(board);
+                        printf("\nThis is an obstacle square! You cannot move the token from here until every other token before the obstacle has reached column %d!\n"
+                               "\nDo you have any other tokens you could move on row %d", column_loc, die);
+
+                        printf("Please enter 1 if you do, 0 if you don't: ");
+                        int tokenOnRow;
+                        scanf("%d", &tokenOnRow);
+
+                        while(tokenOnRow != 0)
                         {
-                            print_board(board);
-                            printf("\nThis is an obstacle square! You cannot move the token from here until every other token before the obstacle has reached column %d!\n"
-                                   "\nDo you have any other tokens you could move on row %d", die, die);
+                            printf("%s, please specify column number.\n", players[i].player_name);
+                            scanf("%d", &column_loc);
 
-                            printf("Please enter 1 if you do, 0 if you don't: ");
-                            int tokenOnRow;
-                            scanf("%d", &tokenOnRow);
-
-                            while(tokenOnRow != 0)
+                            if(board[die][column_loc].type == OBSTACLE)
                             {
-                                printf("%s, please specify column number.\n", players[i].player_name);
-                                scanf("%d", &column_loc);
 
-                                if(board[die][column_loc].type == OBSTACLE)
-                                {
+                                printf("This is an obstacle square! You cannot move the token from here until every other token before the obstacle has reached row %d!\n"
+                                "Do you have any other tokens you could move on row %d", die, die);
+                                print_board(board);
 
-                                    printf("This is an obstacle square! You cannot move the token from here until every other token before the obstacle has reached row %d!\n"
-                                    "Do you have any other tokens you could move on row %d", die, die);
-                                    print_board(board);
-
-                                    printf("Please enter 1 if you do, 0 if you don't: ");
-                                    scanf("%d", &tokenOnRow);
-
-                                }
-
-                                else if(board[die][column_loc].type == NORMAL)
-                                {
-                                    tokenOnRow = 0;
-                                }
-
-                            move_token(board, die, column_loc, die, column_loc+1);
-                            print_token(board[die][column_loc+1].top_stack);
-                            print_board(board);
+                                printf("Please enter 1 if you do, 0 if you don't: ");
+                                scanf("%d", &tokenOnRow);
 
                             }
 
+                            else if(board[die][column_loc].type == NORMAL)
+                            {
+                                tokenOnRow = 0;
+                            }
+
+                        move_token(board, die, column_loc, die, column_loc+1);
+                        print_token(board[die][column_loc+1].top_stack);
+                        print_board(board);
 
                         }
+                  }
 
-
-
-                       else if (obstacle_to_normal(board, die, column_loc) == 1)
-                        {
-
-                           move_token(board, die, column_loc, die, column_loc+1);
-                            print_token(board[die][column_loc+1].top_stack);
-                            print_board(board);
-                        }
-        }
-
-
-
-                    else if (board[die][column_loc].type == NORMAL)
+                else if (check_if_obstacle(board, die, column_loc) == 1)
                     {
+                        board[die][column_loc].type = NORMAL;
+                        move_token(board, die, column_loc, die, column_loc+1);
+                        print_token(board[die][column_loc+1].top_stack);
+                        print_board(board);
 
-                            move_token(board, die, column_loc, die, column_loc+1);
-                            print_token(board[die][column_loc+1].top_stack);
-                            print_board(board);
                     }
+              }
+
+            else if (board[die][column_loc].type == NORMAL)
+                {
+                    move_token(board, die, column_loc, die, column_loc+1);
+                    print_token(board[die][column_loc+1].top_stack);
+                    print_board(board);
+                }
 
 
 
+            if (checkWhoWon(board, players, numPlayers) != 7)
+            {
+                printf("\nCongratulations, %s! You are the winner of the game with 3 %s tokens in the last column!!\n",
+                       players[checkWhoWon(board, players, numPlayers)].player_name, players[checkWhoWon(board, players, numPlayers)].col);
+                       return 1;
+            }
 
 
-        }
-
-
-
-
-            if (i == numPlayers - 1)
+           if (i == numPlayers - 1)
             {
             i = -1; // reset to the first player
             }
-            // ask which token he wants to move (in coordinates) (it must be his token)
-            // and in which direction (up or down)
-            // move the token
-}               }
-
-        // once you're done with the sideways move
-        // ask the player which token does he wants to move according the die result row (it doesn't have to be his token, but it has to be the top one)
-        // move the token forward (one column ahead) ONLY IF IT IS NOT ON AN OBSTACLE SQUARE
-
-        // check if he won and break
-
-        // check if obstacles are still obstacles
-
-        // once the last player took his turn
-
-
-
-
-
-
-
+        }
+    }
+    return 0;
+}

@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
 
     //manages the turns of the game and identifies a winner
-    play_game(board, players, numPlayers);
+    while (play_game(board, players, numPlayers) != 1);
 
     return 0;
 
