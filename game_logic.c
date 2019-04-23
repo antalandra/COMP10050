@@ -281,10 +281,7 @@ int play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlay
     // for each player
     for (int i = 0; i < numPlayers; ++i)
     {
-        int die;
-        //int die = rand()%6; // roll die
-        printf("\nEnter die: ");
-        scanf("%d", &die);
+        int die = rand()%6; // roll die
 
         printf("\nPlayer's turn: %s (%s.)\n", players[i].player_name, color_name(players[i].col));
 
