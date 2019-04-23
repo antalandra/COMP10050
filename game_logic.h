@@ -1,4 +1,3 @@
-
 /*
  * Prints the board
  *
@@ -10,19 +9,16 @@ void print_board(Square board[NUM_ROWS][NUM_COLUMNS]);
 /*
  *Counting number of tokens in a column
  *Input:    board - a 6x9 array of squares that represents the board
- *          column co-ordinate inserted by the player
  */
-
-void countNoOfTokens(Square board[NUM_ROWS][NUM_COLUMNS], int column_loc);
+void countNoOfTokens(Square board[NUM_ROWS][NUM_COLUMNS]);
 
 /*
- *Couting number of tokens in a square of a column
+ *Counting number of tokens in a square of a column
  *Input:     board - a 6x9 array of squares that represents the board
  *          row co-ordinate inserted by the player
- *          column co-ordinate inserted by the player
  *          -> returns the number of tokens in that square at that particular place in time
  */
-int NoOfTokensInSquare(Square board[NUM_ROWS][NUM_COLUMNS], int row_loc, int column_loc);
+int NoOfTokensInSquare(Square board[NUM_ROWS][NUM_COLUMNS], int row_loc);
 
 /*
  *finding minimum amount of tokens in a column and manipulating global variable with this value
@@ -35,7 +31,6 @@ void minNumOfTokensInCol(void);
  *
  * Input: the color of each player and the number of players
  */
-
 int checkIfChosen(Player players[], int numPlayer);
 
 /*
@@ -65,7 +60,6 @@ int play_game(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlay
  *       current row and column location of token
  *       future row and column location of token
  */
-
 void move_token(Square board[][NUM_COLUMNS], int cur_row, int cur_col, int new_row, int new_col);
 
 /*
@@ -75,6 +69,4 @@ void move_token(Square board[][NUM_COLUMNS], int cur_row, int cur_col, int new_r
  *      the players
  *      number of players
  */
-
 int checkWhoWon(Square board[NUM_ROWS][NUM_COLUMNS], Player players[], int numPlayers);
-

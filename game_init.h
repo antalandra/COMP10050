@@ -1,16 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * File:   newfile.h
- * Author: lpasqua
- *
- * Created on 06 March 2019, 12:18
- */
-
 //number of rows of the board
 #define NUM_ROWS 6
 //number of columns of the board
@@ -56,7 +43,6 @@ typedef struct Player{
     enum color col;
 }Player;
 
-
 /*
  * This function creates the board for the first time
  *
@@ -73,6 +59,3 @@ void initialize_board(Square board[NUM_ROWS][NUM_COLUMNS]);
  *
  */
 int initialize_players(Player players[]);
-
-
-

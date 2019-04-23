@@ -1,15 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 #include "game_init.h"
 #include "game_logic.h"
 #include <stdio.h>
-
-
 /*
  * This function creates the board for the first time
  *
@@ -33,26 +24,26 @@ void initialize_board(Square board[NUM_ROWS][NUM_COLUMNS]){
     }
 }
 
-
  /*
  * This function creates players for the first time
  *
  * Input: the array of players to be initialized
  * Output: The number of players of the game
  */
-int initialize_players(Player players[]){
+int initialize_players(Player players[])
+{
 
-    int numPlayer = 0; //initialising number of players to zero at beginning of the game
+    int numPlayer = 0; //initializing number of players to zero at beginning of the game
 
     //asking how many players will play and storing value in variable numPlayer
-    printf("Please enter the number of players (between 2 and 6): ");
+    printf("\nPlease enter the number of players (between 2 and 6): ");
     scanf("%d", &numPlayer);
 
     //checking if the number of players is valid
     if (numPlayer < 2 || numPlayer > 6)
     {
         //error message when player number is too small or too high
-        printf("Sorry, the game can accommodate only between 2 and 6 players.\n"
+        printf("\nSorry, the game can accommodate only between 2 and 6 players.\n"
                "Please start again.\n");
         return 0;
     }
@@ -66,10 +57,13 @@ int initialize_players(Player players[]){
         {
             printf("\nPlease enter name of player %d: ", pl+1);
 
-            scanf("%s", &players[pl].player_name); //scanning name of player
+            char new_line;  //creating a variable to store the new line in the buffer
+            scanf("%c", &new_line); //storing the new line stored in the buffer
+
+            gets(players[pl].player_name); //scanning name of player
 
             //asking user to pick color they wish to use
-            printf("Please pick the color you wish to play with:\n"
+            printf("\nPlease pick the color you wish to play with:\n"
                    "Input 1 for Red.\n"
                    "Input 2 for Blue.\n"
                    "Input 3 for Green\n"
@@ -80,7 +74,7 @@ int initialize_players(Player players[]){
             //scanning choice into a variable
            scanf("%d", &color_choice);
            color_choice--;  //decrementing choice as ENUMS are ordered from zero
-           players[pl].col = color_choice;    //placing color choice in corresponding member of struct of that player
+           players[pl].col = color_choice;    //placing color choice in corresponding member of structure of that player
 
         }
 
@@ -88,10 +82,10 @@ int initialize_players(Player players[]){
         while (checkIfChosen(players, numPlayer) == 1)
         {
             //asking users to input their colors again when the return value of function that checks color validity is 1
-             printf("Each player must have a different color!\n");
+            printf("Each player must have a different color!\n");
             for(int pl = 0; pl < numPlayer; ++pl)
             {
-                printf("Player %s, please enter a color.\n"
+                printf("\nPlayer %s, please enter a color.\n"
                        "Input 1 for Red.\n"
                        "Input 2 for Blue.\n"
                        "Input 3 for Green\n"
@@ -99,21 +93,12 @@ int initialize_players(Player players[]){
                        "Input 5 for Pink.\n"
                        "Input 6 for Orange.\n", players[pl].player_name);
 
-                scanf("%d", &color_choice);
-                color_choice--;
-                players[pl].col = color_choice;
+                scanf("%d", &color_choice); //scanning color choice again
+                color_choice--;  //decrementing as ENUM colors start from zero
+                players[pl].col = color_choice; //setting the color choice in the corresponding member of structure of that player
             }
-
-
         }
-
     }
-        //returning the number of players
-        return numPlayer;
 
-
+        return numPlayer;   //returning the number of players
 }
-
-
-
-
