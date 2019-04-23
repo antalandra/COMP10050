@@ -30,5 +30,4 @@ DAIANA MORJOLIC (18303531):
 -->added function prototypes for fairness and implemented them into place_tokens
 --> commenting
 
-Most of the work was written on Daiana's laptop due to better performance, so although the work was split and uploaded fairly, we both worked on all functions and their implementation. As such, we have completed the entire project together.
-
+Most of the work was written on Daiana's laptop due to better performance and the fact that we met up in person to work on the project. So although the work was split and uploaded fairly, we both worked on all functions and their implementation. As such, we have completed the entire project together.
