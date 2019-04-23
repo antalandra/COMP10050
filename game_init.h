@@ -16,6 +16,8 @@
 //number of columns of the board
 #define NUM_COLUMNS 9
 
+//declaring global variable to store the minimum number of tokens in a column of the board
+int min_num_of_tokens;
 
 //types of squares
 enum stype{

@@ -6,11 +6,36 @@
  */
 void print_board(Square board[NUM_ROWS][NUM_COLUMNS]);
 
+
+/*
+ *Counting number of tokens in a column
+ *Input:    board - a 6x9 array of squares that represents the board
+ *          column co-ordinate inserted by the player
+ */
+
+void countNoOfTokens(Square board[NUM_ROWS][NUM_COLUMNS], int column_loc);
+
+/*
+ *Couting number of tokens in a square of a column
+ *Input:     board - a 6x9 array of squares that represents the board
+ *          row co-ordinate inserted by the player
+ *          column co-ordinate inserted by the player
+ *          -> returns the number of tokens in that square at that particular place in time
+ */
+int NoOfTokensInSquare(Square board[NUM_ROWS][NUM_COLUMNS], int row_loc, int column_loc);
+
+/*
+ *finding minimum amount of tokens in a column and manipulating global variable with this value
+
+void minNumOfTokensInCol(void);
+*/
+
 /*
  * returns value 1 if two or more players have the same color
  *
  * Input: the color of each player and the number of players
  */
+
 int checkIfChosen(Player players[], int numPlayer);
 
 /*

@@ -44,26 +44,28 @@ int initialize_players(Player players[]){
 
     int numPlayer = 0; //initialising number of players to zero at beginning of the game
 
-    //asking how many players will play and storing value in variable player_num
+    //asking how many players will play and storing value in variable numPlayer
     printf("Please enter the number of players (between 2 and 6): ");
     scanf("%d", &numPlayer);
 
     //checking if the number of players is valid
-    if(numPlayer < 2 || numPlayer > 6)
+    if (numPlayer < 2 || numPlayer > 6)
     {
         //error message when player number is too small or too high
         printf("Sorry, the game can accommodate only between 2 and 6 players.\n"
                "Please start again.\n");
-        return -1;
+        return 0;
     }
 
     else
     {
+        //declaring variable that will hold integer value for color choice
         int color_choice;
         //going through the number of players to fill in their names and color choices
         for (int pl = 0; pl < numPlayer; ++pl)
         {
             printf("\nPlease enter name of player %d: ", pl+1);
+
             scanf("%s", &players[pl].player_name); //scanning name of player
 
             //asking user to pick color they wish to use
@@ -82,27 +84,31 @@ int initialize_players(Player players[]){
 
         }
 
-        if (checkIfChosen(players, numPlayer) == 1)
+        //checking if the color has been chosen already by another user
+        while (checkIfChosen(players, numPlayer) == 1)
         {
+            //asking users to input their colors again when the return value of function that checks color validity is 1
              printf("Each player must have a different color!\n");
             for(int pl = 0; pl < numPlayer; ++pl)
             {
-                printf("Player %d, please enter a color.\n"
+                printf("Player %s, please enter a color.\n"
                        "Input 1 for Red.\n"
                        "Input 2 for Blue.\n"
                        "Input 3 for Green\n"
                        "Input 4 for Yellow.\n"
                        "Input 5 for Pink.\n"
-                       "Input 6 for Orange.\n", pl+1);
+                       "Input 6 for Orange.\n", players[pl].player_name);
 
                 scanf("%d", &color_choice);
                 color_choice--;
                 players[pl].col = color_choice;
             }
+
+
         }
 
     }
-
+        //returning the number of players
         return numPlayer;
 
 
